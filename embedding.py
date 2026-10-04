@@ -1,6 +1,4 @@
-
 from model import embeddings
-
 
 def embed_chunks(chunks):
     """

@@ -1,31 +1,42 @@
-
 from document_loader import load_pdf
 from text_splitter import split_documents
+from vector_store import create_vector_store, vector_store_exists
 from rag import ask_question
 
-
-PDF_PATH = "/Users/dhirajgupta/Downloads/laws-of-cricket-2017-code-3rd-edition-2022_1.pdf"
+PDF_PATH = "data/alphabet_2022_10k.pdf"
 
 
 def main():
-    # Load the PDF
-    documents = load_pdf(PDF_PATH)
 
-    # Split pages into chunks
-    chunks = split_documents(documents)
+    # Create the vector database only if it doesn't already exist
+    if not vector_store_exists():
 
-    # Ask questions
-    print("\nLaw of Cricket.")
+        print("Creating vector database...")
+
+        documents = load_pdf(PDF_PATH)
+
+        chunks = split_documents(documents)
+
+        create_vector_store(chunks)
+
+        print("Vector database created.")
+
+    else:
+        print("Existing vector database found.")
+
+
+    print("\nAlphabet 2022 10-K RAG Assistant")
     print("Type 'exit' to quit.\n")
 
     while True:
+
         question = input("Your question: ")
 
         if question.lower().strip() == "exit":
             print("Goodbye!")
             break
 
-        answer = ask_question(chunks, question)
+        answer = ask_question(question)
 
         print("\nAnswer:")
         print(answer)

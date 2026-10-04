@@ -1,12 +1,11 @@
+from vector_store import load_vector_store
 
-from vector_store import create_vector_store
 
-
-def get_relevant_chunks(chunks, question, k=4):
+def get_relevant_chunks(question, k=4):
     """
-    Retrieve the most relevant chunks for a question.
+    Retrieve the most relevant chunks from ChromaDB.
     """
-    vector_store = create_vector_store(chunks)
+    vector_store = load_vector_store()
 
     results = vector_store.similarity_search(
         question,

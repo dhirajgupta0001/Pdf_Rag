@@ -1,13 +1,12 @@
-
 from model import model
 from retriever import get_relevant_chunks
 
 
-def ask_question(chunks, question):
+def ask_question(question):
     """
     Answer a question using retrieved context from the PDF.
     """
-    relevant_chunks = get_relevant_chunks(chunks, question)
+    relevant_chunks = get_relevant_chunks(question)
 
     context = "\n\n".join(
         chunk.page_content for chunk in relevant_chunks

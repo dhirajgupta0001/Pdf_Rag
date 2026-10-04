@@ -1,12 +1,16 @@
+import os
 
 from langchain_chroma import Chroma
 from model import embeddings
 from embedding import embed_chunks
 
 
-def create_vector_store(chunks, persist_directory="./chroma_db"):
+PERSIST_DIRECTORY = "./chroma_db"
+
+
+def create_vector_store(chunks):
     """
-    Store text chunks and their embeddings in ChromaDB.
+    Create and save the ChromaDB vector store.
     """
     vectors = embed_chunks(chunks)
 
@@ -16,7 +20,7 @@ def create_vector_store(chunks, persist_directory="./chroma_db"):
     vector_store = Chroma(
         collection_name="alphabet_10k",
         embedding_function=embeddings,
-        persist_directory=persist_directory
+        persist_directory=PERSIST_DIRECTORY
     )
 
     vector_store.add_texts(
@@ -26,3 +30,23 @@ def create_vector_store(chunks, persist_directory="./chroma_db"):
     )
 
     return vector_store
+
+
+def load_vector_store():
+    """
+    Load the existing ChromaDB vector store.
+    """
+    vector_store = Chroma(
+        collection_name="alphabet_10k",
+        embedding_function=embeddings,
+        persist_directory=PERSIST_DIRECTORY
+    )
+
+    return vector_store
+
+
+def vector_store_exists():
+    """
+    Check whether the ChromaDB directory already exists.
+    """
+    return os.path.exists(PERSIST_DIRECTORY)
